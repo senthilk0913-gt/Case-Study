@@ -1,0 +1,16 @@
+{
+	"profile" : {
+		"firstName" : "Senthil",
+		"lastName"  : "Kumar",
+		"age" : "31",
+		"friends" : [ 
+						{
+						"firstName" : "Dhinesh",
+						"lastName"  : "Kumar"},
+						{
+						"firstName" : "Satheesh",
+						"lastName"  : "Kumar"
+						}
+					]		
+	}
+}
