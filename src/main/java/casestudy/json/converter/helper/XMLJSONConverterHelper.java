@@ -56,71 +56,49 @@ public class XMLJSONConverterHelper implements XMLJSONConverterConstants {
 
 
 
-	private static String convertJsonIntoXML(Object jsonObject, Object jsonAttributeName) {
-
-		String xml = EMPTY;
-
-		if (null == jsonObject) {
-
-			xml = xml + prepareXML(NULL, null, jsonAttributeName, true);
-
-		} else if (jsonObject instanceof String) {
-
-			xml = xml + prepareXML(STRING, jsonObject, jsonAttributeName, true);
-
-		} else if (jsonObject instanceof Integer || jsonObject instanceof BigDecimal
-				|| jsonObject instanceof Float || jsonObject instanceof Double) {
-
-			xml = xml + prepareXML(NUMBER, jsonObject, jsonAttributeName, true);
-
-		} else if (jsonObject instanceof Boolean) {
-private StringBuilder toCustomXml(Object jsonObject, Object jsonAttributeName) {
+	private static StringBuilder convertJsonIntoXML(Object jsonObject, Object jsonAttributeName) {
 
 		StringBuilder xml = new StringBuilder(EMPTY);
 
 		if (null == jsonObject) {
 
-			xml.append(prepareXML(NULL, null, jsonAttributeName, true));
+			xml = xml.append(prepareXML(NULL, null, jsonAttributeName, true));
 
 		} else if (jsonObject instanceof String) {
 
-			xml.append(prepareXML(STRING, jsonObject, jsonAttributeName, true));
+			xml = xml.append(prepareXML(STRING, jsonObject, jsonAttributeName, true));
 
-		} else if (jsonObject instanceof Integer 
-				|| jsonObject instanceof BigInteger 
-				|| jsonObject instanceof BigDecimal
-				|| jsonObject instanceof Float 
-				|| jsonObject instanceof Long
-				|| jsonObject instanceof Double) {
+		} else if (jsonObject instanceof Integer || jsonObject instanceof BigDecimal
+				|| jsonObject instanceof Float || jsonObject instanceof Double) {
 
-			xml.append(prepareXML(NUMBER, jsonObject, jsonAttributeName, true));
+			xml = xml.append(prepareXML(NUMBER, jsonObject, jsonAttributeName, true));
 
 		} else if (jsonObject instanceof Boolean) {
 
-			xml.append(prepareXML(BOOLEAN, jsonObject, jsonAttributeName, true));
+			xml = xml.append(prepareXML(BOOLEAN, jsonObject, jsonAttributeName, true));
 
 		}  else if (jsonObject instanceof Map)  {
 
-			xml.append(prepareXML(OBJECT, jsonObject, jsonAttributeName, false));
+			xml = xml.append(prepareXML(OBJECT, jsonObject, jsonAttributeName, false));
 
-			for (Object key : ((Map) jsonObject).keySet()) {
+			for (Object hashMapKey : ((Map) jsonObject).keySet()) {
 
-				xml.append(toCustomXml(((Map) jsonObject).get(key), key));
+				xml = xml.append(convertJsonIntoXML(((Map) jsonObject).get(hashMapKey), hashMapKey));
 
 			}
-			xml.append(END_TAG.replace(TAG, OBJECT));
+			xml = xml.append(END_TAG.replace(TAG, OBJECT));
 
 		} else if (jsonObject instanceof List) {
 
 
-			xml.append(prepareXML(ARRAY, jsonObject, jsonAttributeName, false));
+			xml = xml.append(prepareXML(ARRAY, jsonObject, jsonAttributeName, false));
 
 			for (Object object : (List)jsonObject) {
 
-				xml.append(toCustomXml(object, null));
+				xml  = xml.append(convertJsonIntoXML(object, null));
 			}
 
-			xml.append(END_TAG.replace(TAG, ARRAY));
+			xml = xml.append(END_TAG.replace(TAG, ARRAY));
 
 		}
 
