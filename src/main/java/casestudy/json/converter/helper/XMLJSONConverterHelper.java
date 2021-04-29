@@ -74,31 +74,53 @@ public class XMLJSONConverterHelper implements XMLJSONConverterConstants {
 			xml = xml + prepareXML(NUMBER, jsonObject, jsonAttributeName, true);
 
 		} else if (jsonObject instanceof Boolean) {
+private StringBuilder toCustomXml(Object jsonObject, Object jsonAttributeName) {
 
-			xml = xml + prepareXML(BOOLEAN, jsonObject, jsonAttributeName, true);
+		StringBuilder xml = new StringBuilder(EMPTY);
+
+		if (null == jsonObject) {
+
+			xml.append(prepareXML(NULL, null, jsonAttributeName, true));
+
+		} else if (jsonObject instanceof String) {
+
+			xml.append(prepareXML(STRING, jsonObject, jsonAttributeName, true));
+
+		} else if (jsonObject instanceof Integer 
+				|| jsonObject instanceof BigInteger 
+				|| jsonObject instanceof BigDecimal
+				|| jsonObject instanceof Float 
+				|| jsonObject instanceof Long
+				|| jsonObject instanceof Double) {
+
+			xml.append(prepareXML(NUMBER, jsonObject, jsonAttributeName, true));
+
+		} else if (jsonObject instanceof Boolean) {
+
+			xml.append(prepareXML(BOOLEAN, jsonObject, jsonAttributeName, true));
 
 		}  else if (jsonObject instanceof Map)  {
 
-			xml = xml + prepareXML(OBJECT, jsonObject, jsonAttributeName, false);
+			xml.append(prepareXML(OBJECT, jsonObject, jsonAttributeName, false));
 
-			for (Object hashMapKey : ((Map) jsonObject).keySet()) {
+			for (Object key : ((Map) jsonObject).keySet()) {
 
-				xml = xml+ convertJsonIntoXML(((Map) jsonObject).get(hashMapKey), hashMapKey);
+				xml.append(toCustomXml(((Map) jsonObject).get(key), key));
 
 			}
-			xml = xml + END_TAG.replace(TAG, OBJECT);
+			xml.append(END_TAG.replace(TAG, OBJECT));
 
 		} else if (jsonObject instanceof List) {
 
 
-			xml = xml + prepareXML(ARRAY, jsonObject, jsonAttributeName, false);
+			xml.append(prepareXML(ARRAY, jsonObject, jsonAttributeName, false));
 
 			for (Object object : (List)jsonObject) {
 
-				xml  = xml + convertJsonIntoXML(object, null);
+				xml.append(toCustomXml(object, null));
 			}
 
-			xml = xml + END_TAG.replace(TAG, ARRAY);
+			xml.append(END_TAG.replace(TAG, ARRAY));
 
 		}
 
